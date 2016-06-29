@@ -223,6 +223,7 @@ plot(hclust(teste, method = "average"), hang = -1, main = "Dendograma de Bray-Cu
 Apesar de acreditarmos que possivelmente temos dados viesados e não aleatórios, fizemos as análises considerando o oposto disso.   
 As análises feitas, foram por meio de ferramentas visuais (gráficos e tabelas), facilitando a interpretação dos dados.  
 O código foi produzido de maneira reprodutiva, ou seja, se ocorrerem mais votos, ele será atualizado.  
+
 As conclusões feitas a baixo são referentes aos dados do site no dia 30/06/2016:  
 
 
