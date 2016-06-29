@@ -8,7 +8,8 @@ output: html_document
 
   Em meio à crise em que o Brasil se encontra, a educação foi afetada com cortes de orçamento e, infelizmente, isso inclui as Universidades.     
 Diante disso, o movimento grevista tem tomado conta da Unicamp e, com isso, a greve foi decidida por meio de assembleias estudantis. Contudo, muito se questiona a respeito da representatividade das decisões tomadas, uma vez que existe pouca adesão.   
-Com intuito de verificar qual a opinião da classe estudantil, foi criado o site “https://votaunicamp.herokuapp.com/” para que os alunos matriculados tanto em cursos de graduação e pós graduação votassem e, se quisessem, justificassem o voto.
+Com intuito de verificar qual a opinião da classe estudantil, foi criado o site “https://votaunicamp.herokuapp.com/” para que os alunos matriculados tanto em cursos de graduação e pós graduação votassem e, se quisessem, justificassem o voto.  
+No entanto, acreditamos que esses dados possam ser viesados devido a algumas situações onde o aluno prefere não realizar o voto pelo site. Como por exemplo: o fato do voto estar vinculado com o primeiro nome do aluno, pode fazer com que este sinta-se intimidado; por outro lado, temos também uma "burocracia" para votar, visto que, é necessário um código de identificação obtido no site da Dac, fazendo com que o aluno desista de votar; outro ponto importante, é que muitos alunos contrários à greve procuram meios alternativos para mostrar sua opinião devido ao desinteresse de participar das longas assembleias; entre outros.   
 
 ```{r input, message=FALSE, results='hide', echo=FALSE, warning=FALSE}
 if (Sys.info()['sysname'] == 'Darwin') Sys.setlocale(locale='UTF-8')
@@ -149,7 +150,7 @@ library(ggplot2)
 ggplot(dados, aes(reorder(instituto, total), total)) + geom_bar(stat='identity') + coord_flip() + theme_bw() #não esta rodadno
 ```
 
-Na tabela abaixo temos mais detalhadamente os votos de cada instituto.
+Na tabela abaixo, temos mais detalhadamente os votos de cada instituto:  
 
 ```{r, echo=FALSE, fig.cap="Tabela de votos por instituto"}
 library(formattable)
@@ -179,8 +180,7 @@ Estimamos que a proporção de alunos contrários à greve corresponde a `r roun
 
 ##Análise de Cluster
 
-Como alunos, sabemos que existe uma divergência de opinião em função do instituto a que pertence.   
-Sendo assim, é normal questionar-se se existe institutos com mesma opinião. Vamos avaliar essa diferença usando um gráfico de componentes, como segue:
+Como alunos, sabemos que existe uma divergência de opinião entre os institutos. Vamos avaliar essa diferença usando um gráfico de componentes, como se segue:  
 
 ```{r plot, echo=FALSE, fig.cap="Gráfico de Componentes para Institutos"}
 newtbl = dados2[,c("Não","Sim","Abstenções")]
@@ -191,19 +191,21 @@ fit= prcomp(newtbl)
 biplot(fit)
 ```
 
-Como podemos ver, este gráfico mostra a tendência marjoritaria dos votos por institutos em relação aos vetores referentes as opções de voto. É notável que existem alguns instutos com opiniões semelhantes, por isso cabe um estudo aprofundado do assunto.   
+Como podemos ver, o gráfico acima mostra a tendência marjoritária dos votos por institutos em relação aos vetores referentes as opções de voto. Nota-se que existem alguns institutos com opiniões semelhantes, por isso cabe um estudo aprofundado do assunto.   
 Nesse caso, a metodologia usada será a análise de *cluster*.  
-Abaixo calculamos as proporções de votos pelas áreas
-##FAZER TABELA
+Abaixo calculamos as proporções de votos pelas áreas.
+
 ```{r prop-area, echo=FALSE}
 darea = mytbl[, list(total=sum(total), sim=sum(sim), nao=sum(nao), abstencao=sum(abstencao)), by= area]
 darea = as.data.frame(darea)
 darea$psim = with(darea, sim/total)
 darea$pnao = with(darea, nao/total)
 darea$pabs = with(darea, abstencao/total)
+formattable(darea) #testar essa linha quando o site voltar ao ar
 ```
 
-Ao realizarmos análise de cluster por meio de um dendograma utilizando o Índice de *Bray-Curtis*. Este indicador calcula a similaridade entre os institutos, e pertence ao intervalo de $[0,1]$. Quanto mais próximo de 0, a semelhança é maior entre os institutos, uma vez que o índice calcula a "distância" entre grupos.
+Ao realizarmos análise de *cluster* por meio de um dendograma, utilizamos os Índices de *Bray-Curtis* e *Jaccard*  como critério. 
+Esses índices calculam a similaridade entre os institutos, e pertencem ao intervalo $[0,1] \in \Re$. Quanto mais próximo de $0$, a semelhança é maior entre os institutos, uma vez que o índice calcula a "distância" entre os grupos.  
 
 ```{r dendograma, echo=FALSE, fig.cap="Dendograma de Cluster"}
 par(mfrow=c(1,2))
@@ -217,3 +219,11 @@ plot(hclust(teste, method = "average"), hang = -1, main = "Dendograma de Bray-Cu
 
 
 #Conclusão
+
+Apesar de acreditarmos que possivelmente temos dados viesados e não aleatórios, fizemos as análises considerando o oposto disso.   
+As análises feitas, foram por meio de ferramentas visuais (gráficos e tabelas), facilitando a interpretação dos dados.  
+O código foi produzido de maneira reprodutiva, ou seja, se ocorrerem mais votos, ele será atualizado.  
+As conclusões feitas a baixo são referentes aos dados do site no dia 30/06/2016:  
+
+
+
